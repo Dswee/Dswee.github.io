@@ -50,7 +50,7 @@
           <div>
             <label>fragment shader</label>
           </div>
-          <textarea class="text" id="fragment shader" spellcheck="false">precision highp float;&#10varying highp vec2 p;&#10uniform int cnt;&#10float t;&#10int mod(int a, int b){&#10&#09if(a &#60 0) a = -a;&#10&#09if(b &#60 0) b = -b;&#10&#09return a - a / b * b;&#10}&#10int xor(int a, int b){&#10&#09if(a == b) return 0;&#10&#09else return 1;&#10}&#10void main(){&#10&#09t = float(cnt) / 60.0;&#10&#09vec2 v = floor(p);&#10&#09int r = mod(int(v.x), 2);&#10&#09int b = mod(int(v.y), 2);&#10&#09r = xor(r, b);&#10&#09gl_FragColor = vec4(r, r, 1.0, 1.0);&#10}&#10</textarea>
+          <textarea class="text" id="fragment shader" spellcheck="false">precision highp float;&#10varying highp vec2 p;&#10uniform int cnt;&#10uniform vec2 m_pos;&#10float t;&#10int mod(int a, int b){&#10&#09if(a &#60 0) a = -a;&#10&#09if(b &#60 0) b = -b;&#10&#09return a - a / b * b;&#10}&#10int xor(int a, int b){&#10&#09if(a == b) return 0;&#10&#09else return 1;&#10}&#10void main(){&#10&#09t = float(cnt) / 60.0;&#10&#09vec2 v = floor(p);&#10&#09int r = mod(int(v.x), 2);&#10&#09int b = mod(int(v.y), 2);&#10&#09r = xor(r, b);&#10&#09gl_FragColor = vec4(r, r, 1.0, 1.0);&#10}&#10</textarea>
         </div>
         <p><button type="button" onclick="use_shader();">complie shader</button></p>
       </div>

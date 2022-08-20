@@ -35,13 +35,17 @@ var is_mouse_dowm = false;
 var px = 0;
 var py = 0;
 
+var mouse_x = 0.0;
+var mouse_y = 0.0;
+
 var scale_loc = gl.getUniformLocation(shader_program, "scale");
 var center_loc = gl.getUniformLocation(shader_program, "center");
-
+var mouse_pos_loc = gl.getUniformLocation(shader_program, "m_pos");
 function draw(){
     gl.uniform1i(cnt_pos, time);
     gl.uniform2f(scale_loc, scene_scalex, scene_scaley);
     gl.uniform2f(center_loc, scene_centerx, scene_centery);
+    gl.uniform2f(mouse_pos_loc, mouse_x, mouse_y);
     time++;
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
     requestAnimationFrame(draw);
@@ -54,6 +58,7 @@ function use_shader(){
     cnt_pos = gl.getUniformLocation(shader_program, 'cnt');
     scale_loc = gl.getUniformLocation(shader_program, "scale");
     center_loc = gl.getUniformLocation(shader_program, "center");
+    mouse_pos_loc = gl.getUniformLocation(shader_program, "m_pos");
     gl.useProgram(shader_program);
 }
 
@@ -107,6 +112,12 @@ canvas.addEventListener("mousemove", function(e){
         scene_centery += 2 * scene_scaley / 512 * (e.offsetY - py);
         px = e.offsetX;
         py = e.offsetY;
+    }
+    else{
+        mouse_x = 2 * e.offsetX / 512.0 - 1.0;
+        mouse_y = 2.0 * (1.0 - e.offsetY / 512.0) - 1.0;
+        mouse_x = mouse_x * scene_scalex + scene_centerx;
+        mouse_y = mouse_y * scene_scaley + scene_centery;
     }
 });
 canvas.onwheel = function(e){

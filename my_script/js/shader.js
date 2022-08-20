@@ -15,6 +15,7 @@ var fs = `
 precision highp float;
 varying highp vec2 p;
 uniform int cnt;
+uniform vec2 m_pos;
 float t;
 int mod(int a, int b){
     if(a < 0) a = -a;
