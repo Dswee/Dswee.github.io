@@ -23,15 +23,15 @@ vec2 wave_shader(vec2 uv){
 	vec4 d4 = texture2D(preFrame, uv + vec2(-1.0, 0.0) * offset) ;//* 2.0 - 1.0;
 	float d = length(gl_FragCoord.xy - 512.0 * m_pos);
 	d = mouse_down * smoothstep(4.5, 0.5, d);
-	//d *= sin(1.0 * cnt / 60.0 * 8.0) * 0.05;
+	//d *= sin(1.0 * cnt / 60.0 * 8.0) * 0.5;
 	d += 2.0 * d0.x - d0.y + 0.5*(d1.x + d2.x + d3.x + d4.x - 4.0 * d0.x);
 	d *= 0.999;
 	return vec2(d, d0.x) * (1.0 - clear);
 }
 void main(){
     vec2 c = wave_shader(gl_FragCoord.xy/512.0);
-    //c = 0.5 * c + 0.5;
-	gl_FragColor = vec4(vec3(c.x, c.y,0), 1.0);
+    
+	  gl_FragColor = vec4(vec3(c.x, c.y,0), 1.0);
 }
 `;
 
@@ -77,9 +77,6 @@ function init_shader(gl, vshader, fshader){
     gl.attachShader(p, vertex_shader);
     gl.attachShader(p, frag_shader);
     gl.linkProgram(p);
-
-  // If creating the shader program failed, alert
-
     if (!gl.getProgramParameter(p, gl.LINK_STATUS)) {
         alert('Unable to initialize the shader program: ' + gl.getProgramInfoLog(shaderProgram));
         return null;
@@ -90,15 +87,9 @@ function init_shader(gl, vshader, fshader){
 function shader_load(gl, type, source){
     const shader = gl.createShader(type);
 
-  // Send the source to the shader object
-
     gl.shaderSource(shader, source);
 
-  // Compile the shader program
-
     gl.compileShader(shader);
-
-  // See if it compiled successfully
 
     if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
         alert('An error occurred compiling the shaders: ' + gl.getShaderInfoLog(shader));

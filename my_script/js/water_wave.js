@@ -5,7 +5,6 @@ function getimage(gl, url){
     
     const tex = gl.createTexture();
     image.onload = function() {
-    //文件的Base64字符串
         gl.bindTexture(gl.TEXTURE_2D, tex);
         gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB,gl.RGB, gl.UNSIGNED_BYTE,
             image);
@@ -17,14 +16,8 @@ function getimage(gl, url){
     
     image.src = url;
 
-/**
- * 图像转Base64
- */
     return tex;
-    let c = document.getElementById("img_load");
-    let ctx = c.getContext("2d");
-    var im = ctx.getImageData(0,0,512,512);
-    return im.data;
+
 }
 const canvas = document.getElementById("glCanvas");
 const gl = canvas.getContext('webgl');
@@ -77,8 +70,8 @@ var scene_scaley = 2.0;
 var scene_centerx = 0.0;
 var scene_centery = 0.0;
 var is_mouse_dowm = false;
-var px = 0;
-var py = 0;
+var px = 0.5;
+var py = 0.5;
 var mouse_downf = 0.0;
 var clear = 1.0;
 
@@ -87,41 +80,6 @@ var texturebuffers = [];
 type = gl.getExtension('OES_texture_float') == null? gl.UNSIGNED_BYTE: gl.FLOAT;
 
 const btex = getimage(gl, "../img/stones.png");
-//function gentex(gl, url){
-    /*const btex = gl.createTexture();
-    gl.bindTexture(gl.TEXTURE_2D, btex);
-    const level = 0;
-    const internalFormat = gl.RGBA;
-    const width = 512;
-    const height = 512;
-    const border = 0;
-    const srcFormat = gl.RGBA;
-    const srcType = gl.UNSIGNED_BYTE;
-    //const pixel = new Uint8Array([0, 0, 255, 255]);  // opaque blue
-    //gl.texImage2D(gl.TEXTURE_2D, level, internalFormat,
-    //            width, height, border, srcFormat, srcType,
-    //            pixel);
-    //const pixels = new Uint8Array(gl.drawingBufferWidth * gl.drawingBufferHeight * 4);
-    //gl.readPixels(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
-    var ctx = canvas.getContext("2d");
-    
-    const pixels = getimage('../img/stones.png');
-    alert(pixels);
-    //const image = new Image();
-    //image.onload = function() {
-    gl.bindTexture(gl.TEXTURE_2D, btex);
-    gl.texImage2D(gl.TEXTURE_2D, level, internalFormat,
-        width, height, border, srcFormat, srcType,
-        pixels);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-    gl.bindTexture(gl.TEXTURE_2D, null);*/
-  //};
-  //image.src = url;
-  //return texture;
-//}
-//var btex = gentex(gl, './img/stones.png');
 
 for (let i = 0; i < 2; i++){
     texturebuffers.push(gl.createTexture());
@@ -144,7 +102,9 @@ function draw(){
     gl.uniform1f(cnt_pos, time);
     gl.uniform2f(m_pos, px, py);
     gl.uniform1f(mouse_down, mouse_downf);
+    
     gl.uniform1f(clear_pos, clear);
+    
     clear = 0.0;
     time++;
     gl.bindFramebuffer(gl.FRAMEBUFFER, wave_buffer);
@@ -161,6 +121,7 @@ function draw(){
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
     requestAnimationFrame(draw);
     buffer_id = 1 - buffer_id;
+    
 }
 
 function use_shader(){
@@ -184,7 +145,7 @@ canvas.addEventListener("mousedown", function(e){
 canvas.addEventListener("mouseup", function(e){
     if(e.button == 0){
         is_mouse_dowm = !is_mouse_dowm;
-        mouse_downf = 1.0 - mouse_downf;
+        mouse_downf = 0.0;
     }
 });
 canvas.addEventListener("mousemove", function(e){
@@ -193,34 +154,6 @@ canvas.addEventListener("mousemove", function(e){
         py = (1.0 - e.offsetY / 512.0);
     }
 });
-
-function getBase64Image(img) {
-    var ca = document.createElement("canvas");
-    ca.width = img.width;
-    ca.height = img.height;
-    var ctx = canvas.getContext("2d");
-    ctx.drawImage(img, 0, 0, img.width, img.height);
-    var ext = img.src.substring(img.src.lastIndexOf(".") + 1).toLowerCase();
-    var dataURL = ca.toDataURL("../img" + ext);
-    return dataURL;
-}
-
-/**
- *Base64字符串转二进制
- */
-function dataURLtoBlob(dataurl) {
-    var arr = dataurl.split(','),
-        mime = arr[0].match(/:(.*?);/)[1],
-        bstr = atob(arr[1]),
-        n = bstr.length,
-        u8arr = new Uint8Array(n);
-    while (n--) {
-        u8arr[n] = bstr.charCodeAt(n);
-    }
-    return new Blob([u8arr], {
-        type: mime
-    });
-}
 
 requestAnimationFrame(draw);
 
