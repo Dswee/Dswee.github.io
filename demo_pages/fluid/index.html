@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Simple Fluid Demo</title>
+    <meta charset="utf-8">
+    
+  </head>
+
+  <style type="text/css">
+    canvas{
+      margin-right: 20px;
+    }
+    body{
+      max-width: 1920px;
+    }
+    #display{
+      float: left;
+    }
+  </style>
+  <body>
+      <div id="display">
+        <canvas id="glCanvas" width="512" height="512"></canvas>
+      </div>
+      <div id = "time">1</div>
+      <script id = "file" type="x-shader/x-vertex" src="./shader/simple_fluid.glsl"></script>
+      <script>
+        async function loadShader(url) {
+            const shaderfile = await fetch(url).then(response => response.text());
+            console.log(shaderfile);
+        }
+        let ele = document.getElementById('file');
+        loadShader(ele.getAttribute('src'));
+      </script>
+      <label for="dt">dt</label>
+      <input type="range" id="dt" min="0" max="1" value="0.02" step="0.01" oninput="updateValue('dtValue', this.value)">
+      <div id="dtValue">0.02</div>
+
+      <label for="penSize">PenSize</label>
+      <input type="range" id="penSize" min="0" max="256" value="10" step="1" oninput="updateValue('penSizeValue', this.value)">
+      <div id="penSizeValue">10</div>
+
+      <label for="vel">vel</label>
+      <input type="range" id="vel" min="1" max="5000" value="15" step="1" oninput="updateValue('velValue', this.value)">
+      <div id="velValue">15</div>
+
+      <label for="vis">vis</label>
+      <input type="range" id="vis" min="0" max="1000" value="0.6" step="0.1" oninput="updateValue('visValue', this.value)">
+      <div id="visValue">0.6</div>
+
+      <label for="vor">vor</label>
+      <input type="range" id="vor" min="1" max="5000" value="10" step="1" oninput="updateValue('vorValue', this.value)">
+      <div id="vorValue">10</div>
+
+      <script>
+        function updateValue(id, newValue) {
+          const valueElement = document.getElementById(id);
+          valueElement.textContent = newValue;
+        }
+      </script>
+      
+  </body>
+  <script type = "text/javascript" src="./js/fluid_shader.js"> </script>
+  <script type = "text/javascript" src="./js/fluid.js"></script>
+ 
+</html>
